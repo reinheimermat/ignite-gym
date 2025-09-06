@@ -1,10 +1,20 @@
 import fastify from 'fastify'
 import { ZodError } from 'zod'
-import { appRoutes } from './http/routes'
 import { fromZodError } from 'zod-validation-error'
 import { env } from './env'
+import { appRoutes } from './http/routes'
 
-export const app = fastify()
+export const app = fastify({
+  logger: {
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        translateTime: 'HH:MM:ss Z',
+        ignore: 'pid,hostname',
+      },
+    },
+  },
+})
 
 app.register(appRoutes)
 
