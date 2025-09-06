@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
-    "dev": "node --env-file .env --watch src/server.ts",
+    "dev": "tsx --env-file=.env --watch src/server.ts",
     "build": "tsup src --out-dir build"
   },
   "keywords": [],
@@ -14,6 +14,7 @@
     "@repo/ts-config": "workspace:*",
     "@types/node": "^24.3.1",
     "tsup": "^8.5.0",
+    "tsx": "^4.20.5",
     "typescript": "5.9.2"
   },
   "dependencies": {
