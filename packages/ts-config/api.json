@@ -1,10 +1,4 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "./base.json",
-  "compilerOptions": {
-    "baseUrl": "../../apps/api/src",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  }
+  "extends": "./base.json"
 }

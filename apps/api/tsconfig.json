@@ -1,3 +1,9 @@
 {
-  "extends": "@repo/ts-config/api.json"
+  "extends": "@repo/ts-config/api.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
 }
