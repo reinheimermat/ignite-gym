@@ -1,28 +1,30 @@
 import { afterEach, describe } from 'node:test'
+import { Decimal } from '@prisma/client/runtime/library'
 import { beforeEach, expect, it, vi } from 'vitest'
 import type { GymsRepository } from '@/repositories/gyms-repository'
 import { InMemoryCheckInsRepository } from '@/repositories/in-memory/in-memory-check-ins-repository'
 import { InMemoryGymsRepository } from '@/repositories/in-memory/in-memory-gyms-repository'
 import { CheckInUseCase } from './check-in'
-import { Decimal } from '@prisma/client/runtime/library'
+import { MaxDistanceError } from './errors/max-distance-error'
+import { MaxNumberOfCheckInsError } from './errors/max-number-of-check-ins-error'
 
 let checkInsRepository: InMemoryCheckInsRepository
 let gymsRepository: GymsRepository
 let sut: CheckInUseCase
 
 describe('CheckIn Use Case', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     checkInsRepository = new InMemoryCheckInsRepository()
     gymsRepository = new InMemoryGymsRepository()
     sut = new CheckInUseCase(checkInsRepository, gymsRepository)
 
-    gymsRepository.create({
+    await gymsRepository.create({
       id: 'gym-01',
       title: 'JavaScript Gym',
       description: '',
       phone: '',
-      latitude: new Decimal(-27.2092052),
-      longitude: new Decimal(-49.6401091),
+      latitude: -27.2092052,
+      longitude: -49.6401091,
     })
 
     vi.useFakeTimers()
@@ -42,7 +44,7 @@ describe('CheckIn Use Case', () => {
 
     expect(checkIn.id).toEqual(expect.any(String))
   })
-  
+
   it('should be able to check in', async () => {
     const { checkIn } = await sut.execute({
       userId: 'user-01',
@@ -71,7 +73,7 @@ describe('CheckIn Use Case', () => {
         userLatitude: -27.2092052,
         userLongitude: -49.6401091,
       }),
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(MaxNumberOfCheckInsError)
   })
 
   it('should be able to check in twice but in different days', async () => {
@@ -112,7 +114,7 @@ describe('CheckIn Use Case', () => {
         gymId: 'gym-02',
         userLatitude: -27.2092052,
         userLongitude: -49.6401091,
-      })
-    ).rejects.toBeInstanceOf(Error)
+      }),
+    ).rejects.toBeInstanceOf(MaxDistanceError)
   })
 })
