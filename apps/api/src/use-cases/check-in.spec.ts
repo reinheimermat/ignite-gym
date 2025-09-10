@@ -17,6 +17,7 @@ describe('CheckIn Use Case', () => {
     sut = new CheckInUseCase(checkInsRepository, gymsRepository)
 
     gymsRepository.create({
+      id: 'gym-01',
       title: 'JavaScript Gym',
       description: '',
       phone: '',
@@ -31,6 +32,17 @@ describe('CheckIn Use Case', () => {
     vi.useRealTimers()
   })
 
+  it('should be able to check in', async () => {
+    const { checkIn } = await sut.execute({
+      userId: 'user-01',
+      gymId: 'gym-01',
+      userLatitude: -27.2092052,
+      userLongitude: -49.6401091,
+    })
+
+    expect(checkIn.id).toEqual(expect.any(String))
+  })
+  
   it('should be able to check in', async () => {
     const { checkIn } = await sut.execute({
       userId: 'user-01',
@@ -82,5 +94,25 @@ describe('CheckIn Use Case', () => {
     })
 
     expect(checkIn.id).toEqual(expect.any(String))
+  })
+
+  it('should not be able to check in on distant gyms', async () => {
+    gymsRepository.create({
+      id: 'gym-02',
+      title: 'JavaScript Gym',
+      description: '',
+      phone: '',
+      latitude: new Decimal(-27.0747279),
+      longitude: new Decimal(-49.4889672),
+    })
+
+    await expect(
+      sut.execute({
+        userId: 'user-01',
+        gymId: 'gym-02',
+        userLatitude: -27.2092052,
+        userLongitude: -49.6401091,
+      })
+    ).rejects.toBeInstanceOf(Error)
   })
 })

@@ -14,12 +14,12 @@ export class InMemoryGymsRepository implements GymsRepository {
     return gym
   }
 
-  async create(data: Omit<Gym, 'id'>): Promise<Gym> {
+  async create(data: Gym): Promise<Gym> {
     const gym = {
-      id: 'gym-01',
+      id: data.id ?? crypto.randomUUID(),
       title: data.title,
-      description: data.description || null,
-      phone: data.phone || null,
+      description: data.description,
+      phone: data.phone,
       latitude: data.latitude,
       longitude: data.longitude,
       created_at: new Date(),
