@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "tsx --env-file=.env --watch src/server.ts",
     "build": "tsup src --out-dir build",
-    "test": "dotenv -e .env vitest run",
-    "test:watch": "dotenv -e .env vitest",
+    "test": "dotenv -e .env vitest run --project=unit",
+    "test:e2e": "dotenv -e .env vitest run --project=e2e",
+    "test:watch": "dotenv -e .env vitest --project=unit --watch",
+    "test:e2e:watch": "dotenv -e .env vitest --project=e2e --watch",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui"
   },
@@ -17,6 +19,7 @@
   "devDependencies": {
     "@repo/ts-config": "workspace:*",
     "@types/node": "^24.3.1",
+    "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.2.4",
     "prisma": "^6.15.0",
     "tsup": "^8.5.0",
@@ -28,7 +31,6 @@
   "dependencies": {
     "@fastify/jwt": "^10.0.0",
     "@prisma/client": "6.15.0",
-    "@vitest/coverage-v8": "^3.2.4",
     "bcryptjs": "^3.0.2",
     "dayjs": "^1.11.18",
     "dotenv-cli": "^10.0.0",
