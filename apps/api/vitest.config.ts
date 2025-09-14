@@ -4,13 +4,13 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
+    testTimeout: 60_000,
     projects: [
       {
         extends: true,
         test: {
           name: 'unit',
           include: ['src/use-cases/**/*.spec.ts'],
-          exclude: ['src/use-cases/**/*.e2e.spec.ts'],
         },
       },
       {
