@@ -1,3 +1,4 @@
+import type { FastifyJWT } from '@fastify/jwt'
 import type { FastifyInstance } from 'fastify'
 import request from 'supertest'
 
@@ -13,10 +14,9 @@ export async function createAndAuthenticateUser(app: FastifyInstance) {
     password: 'password123',
   })
 
-  const { user, token } = authResponse.body
+  const { token } = authResponse.body as { token: FastifyJWT }
 
   return {
-    user,
     token,
   }
 }
